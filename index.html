@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BuildConnect Nigeria — Construction Jobs</title>
+<style>
+:root{--ink:#17202a;--muted:#667085;--brand:#f59e0b;--dark:#111827;--bg:#f7f8fa;--card:#fff;--line:#e5e7eb;--green:#15803d}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--ink);background:var(--bg)}
+header{background:linear-gradient(135deg,#111827,#263244);color:#fff;padding:18px 5%;position:sticky;top:0;z-index:10}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px}.logo{font-weight:900;font-size:21px}.logo span{color:#fbbf24}
+nav a{color:#fff;text-decoration:none;margin-left:18px;font-size:14px;opacity:.9}
+.hero{padding:62px 5% 48px;background:linear-gradient(135deg,#fff7df,#fff);}.hero-inner{max-width:1100px;margin:auto}
+.badge{display:inline-block;background:#fef3c7;color:#92400e;padding:7px 12px;border-radius:999px;font-weight:700;font-size:12px}
+h1{font-size:clamp(34px,6vw,62px);line-height:1.02;margin:16px 0 12px;max-width:800px}
+.hero p{max-width:680px;color:#59636f;font-size:18px;line-height:1.6}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}.btn{border:0;border-radius:10px;padding:12px 17px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
+.primary{background:var(--brand);color:#111}.dark{background:var(--dark);color:#fff}.light{background:#fff;color:#111;border:1px solid var(--line)}
+.container{max-width:1100px;margin:auto;padding:38px 5%}.section-title{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:18px}.section-title h2{margin:0;font-size:28px}.muted{color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:25px}.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}.stat b{font-size:26px;display:block}
+.searchbar{display:grid;grid-template-columns:1.5fr 1fr 1fr auto;gap:10px;margin:20px 0}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d8dde5;border-radius:9px;background:#fff;font:inherit}textarea{min-height:110px;resize:vertical}
+.jobs{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.job{background:#fff;border:1px solid var(--line);border-radius:15px;padding:19px}.job h3{margin:0 0 8px}.job .meta{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}.tag{font-size:12px;padding:6px 9px;border-radius:999px;background:#f3f4f6}.pay{color:var(--green);font-weight:800}.job-actions{display:flex;gap:8px;margin-top:15px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:15px;padding:22px;margin-top:20px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}.tab{background:#fff;border:1px solid var(--line);padding:10px 14px;border-radius:9px;cursor:pointer;font-weight:700}.tab.active{background:#111827;color:#fff}
+.hidden{display:none!important}.notice{padding:12px 14px;border-radius:10px;background:#ecfdf3;color:#166534;margin:12px 0}.empty{padding:30px;text-align:center;color:var(--muted);background:#fff;border:1px dashed #ccd2da;border-radius:14px}
+footer{background:#111827;color:#cbd5e1;padding:35px 5%;margin-top:30px}.footer-inner{max-width:1100px;margin:auto;display:flex;justify-content:space-between;gap:25px;flex-wrap:wrap}
+@media(max-width:760px){nav{display:none}.stats{grid-template-columns:1fr 1fr}.searchbar,.jobs,.grid2{grid-template-columns:1fr}.full{grid-column:auto}}
+</style>
+</head>
+<body>
+<header><div class="nav"><div class="logo">Build<span>Connect</span> NG</div><nav><a href="#jobs">Jobs</a><a href="#post">Post a Job</a><a href="#dashboard">Dashboard</a></nav></div></header>
+
+<section class="hero"><div class="hero-inner">
+<span class="badge">NIGERIA'S CONSTRUCTION WORKFORCE MARKETPLACE</span>
+<h1>Find construction work. Find skilled workers.</h1>
+<p>Connect Nigerian construction companies with carpenters, masons, electricians, plumbers, welders, painters, site supervisors and other skilled workers.</p>
+<div class="actions"><a class="btn primary" href="#jobs">Find Jobs</a><a class="btn dark" href="#post">Post a Job</a></div>
+<div class="stats"><div class="stat"><b id="jobCount">0</b><span class="muted">Jobs listed</span></div><div class="stat"><b id="appCount">0</b><span class="muted">Applications</span></div><div class="stat"><b>36</b><span class="muted">States targeted</span></div><div class="stat"><b>24/7</b><span class="muted">Online access</span></div></div>
+</div></section>
+
+<section class="container" id="jobs">
+<div class="section-title"><div><h2>Latest construction jobs</h2><div class="muted">Search by trade, location or keyword.</div></div></div>
+<div class="searchbar">
+<input id="q" placeholder="e.g. Carpenter, Site Supervisor">
+<select id="location"><option value="">All locations</option><option>Lagos</option><option>Abuja</option><option>Rivers</option><option>Delta</option><option>Enugu</option><option>Kano</option><option>Ogun</option><option>Cross River</option></select>
+<select id="type"><option value="">All job types</option><option>Full-time</option><option>Contract</option><option>Project</option></select>
+<button class="btn dark" onclick="renderJobs()">Search</button>
+</div>
+<div id="jobsList" class="jobs"></div>
+</section>
+
+<section class="container" id="post">
+<div class="section-title"><div><h2>Post a construction job</h2><div class="muted">Employers can publish a vacancy in under a minute.</div></div></div>
+<div class="panel">
+<div id="postNotice"></div>
+<form id="jobForm" class="grid2">
+<div><label>Job title</label><input name="title" required placeholder="e.g. Carpenter"></div>
+<div><label>Company</label><input name="company" required placeholder="Company name"></div>
+<div><label>Location</label><select name="location" required><option value="">Choose</option><option>Lagos</option><option>Abuja</option><option>Rivers</option><option>Delta</option><option>Enugu</option><option>Kano</option><option>Ogun</option><option>Cross River</option></select></div>
+<div><label>Job type</label><select name="type" required><option>Full-time</option><option>Contract</option><option>Project</option></select></div>
+<div><label>Salary / pay</label><input name="salary" placeholder="e.g. ₦150,000/month"></div>
+<div><label>Contact email</label><input name="email" type="email" required placeholder="hr@company.com"></div>
+<div class="full"><label>Description</label><textarea name="description" required placeholder="Describe the work, requirements and start date..."></textarea></div>
+<div class="full"><button class="btn primary" type="submit">Publish Job</button></div>
+</form></div>
+</section>
+
+<section class="container" id="dashboard">
+<div class="section-title"><div><h2>Worker dashboard</h2><div class="muted">Create a simple profile and track applications on this device.</div></div></div>
+<div class="tabs"><button class="tab active" onclick="showTab('profile',this)">My Profile</button><button class="tab" onclick="showTab('apps',this)">My Applications</button><button class="tab" onclick="showTab('business',this)">Business Model</button></div>
+<div id="profile" class="panel">
+<form id="profileForm" class="grid2">
+<div><label>Full name</label><input name="name" placeholder="Your name"></div>
+<div><label>Trade</label><input name="trade" placeholder="Carpenter"></div>
+<div><label>Location</label><input name="location" placeholder="Lagos"></div>
+<div><label>Phone</label><input name="phone" placeholder="+234..."></div>
+<div class="full"><label>Skills</label><textarea name="skills" placeholder="Roofing, formwork, doors, concrete work..."></textarea></div>
+<div class="full"><button class="btn dark">Save Profile</button></div>
+</form><div id="profileNotice"></div>
+</div>
+<div id="apps" class="panel hidden"><div id="applicationsList"></div></div>
+<div id="business" class="panel hidden">
+<h3>How this platform makes money</h3>
+<ul><li><b>Featured jobs:</b> charge employers to put vacancies at the top.</li><li><b>Recruitment:</b> charge companies for access to verified worker profiles.</li><li><b>CV service:</b> sell CV/cover-letter preparation to workers.</li><li><b>Premium worker profile:</b> offer verified badges and priority visibility.</li><li><b>Sponsored companies:</b> sell banner/brand placements once traffic grows.</li></ul>
+<p class="muted">This first version stores data in the browser. A production launch should add a secure database, user accounts, payments and an admin panel.</p>
+</div>
+</section>
+
+<footer><div class="footer-inner"><div><b>BuildConnect NG</b><p>Construction jobs and skilled workers in Nigeria.</p></div><div>© 2026 BuildConnect NG</div></div></footer>
+
+<script>
+const seed=[
+{id:1,title:"Carpenter / Formwork Carpenter",company:"Demo Construction Ltd",location:"Lagos",type:"Full-time",salary:"₦150,000–₦220,000/month",description:"Experienced carpenter needed for residential and commercial construction projects."},
+{id:2,title:"Site Supervisor",company:"Demo Projects Nigeria",location:"Abuja",type:"Contract",salary:"₦250,000/month",description:"Supervise daily site activities, labour and quality control. Construction experience required."},
+{id:3,title:"Mason / Block Work Specialist",company:"Demo Build Nigeria",location:"Rivers",type:"Project",salary:"₦8,000/day",description:"Skilled mason needed for block laying and finishing on a building project."},
+{id:4,title:"Electrician",company:"Demo Engineering Services",location:"Ogun",type:"Full-time",salary:"₦120,000/month",description:"Electrical installation and maintenance for construction projects."}
+];
+function getJobs(){return JSON.parse(localStorage.getItem("bc_jobs")||"null")||seed}
+function saveJobs(j){localStorage.setItem("bc_jobs",JSON.stringify(j))}
+function getApps(){return JSON.parse(localStorage.getItem("bc_apps")||"[]")}
+function renderJobs(){
+ const q=document.getElementById("q").value.toLowerCase(), loc=document.getElementById("location").value, typ=document.getElementById("type").value;
+ const jobs=getJobs().filter(j=>(!q||(j.title+" "+j.company+" "+j.description).toLowerCase().includes(q))&&(!loc||j.location===loc)&&(!typ||j.type===typ));
+ document.getElementById("jobCount").textContent=getJobs().length; document.getElementById("appCount").textContent=getApps().length;
+ const el=document.getElementById("jobsList");
+ if(!jobs.length){el.innerHTML='<div class="empty">No jobs match your search.</div>';return}
+ el.innerHTML=jobs.map(j=>`<article class="job"><h3>${esc(j.title)}</h3><div class="muted">${esc(j.company)}</div><div class="meta"><span class="tag">📍 ${esc(j.location)}</span><span class="tag">${esc(j.type)}</span><span class="tag pay">${esc(j.salary||"Pay negotiable")}</span></div><p>${esc(j.description)}</p><div class="job-actions"><button class="btn primary" onclick="apply(${j.id})">Apply Now</button><button class="btn light" onclick="shareJob(${j.id})">Share</button></div></article>`).join("")
+}
+function apply(id){
+ const jobs=getJobs(), j=jobs.find(x=>x.id===id), p=JSON.parse(localStorage.getItem("bc_profile")||"{}");
+ if(!p.name||!p.phone){location.hash="dashboard";showTab("profile",document.querySelector(".tab"));document.getElementById("profileNotice").innerHTML='<div class="notice">Save your name and phone number first, then apply.</div>';return}
+ const apps=getApps(); if(apps.some(a=>a.jobId===id)){alert("You already applied for this job.");return}
+ apps.push({jobId:id,title:j.title,company:j.company,date:new Date().toLocaleDateString()});localStorage.setItem("bc_apps",JSON.stringify(apps));renderJobs();renderApps();alert("Application saved. The employer contact details are available from the job poster in a production version.");
+}
+function shareJob(id){const j=getJobs().find(x=>x.id===id);const text=`${j.title} at ${j.company} — ${j.location}. Find it on BuildConnect NG.`;if(navigator.share)navigator.share({title:j.title,text});else navigator.clipboard?.writeText(text).then(()=>alert("Job details copied to clipboard."))}
+document.getElementById("jobForm").addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target),j=Object.fromEntries(f);j.id=Date.now();const jobs=getJobs();jobs.unshift(j);saveJobs(jobs);e.target.reset();renderJobs();document.getElementById("postNotice").innerHTML='<div class="notice">Job published successfully on this device.</div>';location.hash="jobs"});
+document.getElementById("profileForm").addEventListener("submit",e=>{e.preventDefault();localStorage.setItem("bc_profile",JSON.stringify(Object.fromEntries(new FormData(e.target))));document.getElementById("profileNotice").innerHTML='<div class="notice">Profile saved successfully.</div>';});
+function loadProfile(){const p=JSON.parse(localStorage.getItem("bc_profile")||"{}");const f=document.getElementById("profileForm");Object.keys(p).forEach(k=>{if(f.elements[k])f.elements[k].value=p[k]})}
+function renderApps(){const apps=getApps();document.getElementById("applicationsList").innerHTML=apps.length?apps.map(a=>`<div class="job"><h3>${esc(a.title)}</h3><div class="muted">${esc(a.company)} · Applied ${esc(a.date)}</div></div>`).join(""):'<div class="empty">You have not applied for any jobs yet.</div>'}
+function showTab(id,btn){["profile","apps","business"].forEach(x=>document.getElementById(x).classList.toggle("hidden",x!==id));document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));btn.classList.add("active");if(id==="apps")renderApps()}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+loadProfile();renderJobs();renderApps();
+</script>
+</body></html>
