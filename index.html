@@ -27,6 +27,12 @@ input,select,textarea{width:100%;padding:12px;border:1px solid #d8dde5;border-ra
 footer{background:#111827;color:#cbd5e1;padding:35px 5%;margin-top:30px}.footer-inner{max-width:1100px;margin:auto;display:flex;justify-content:space-between;gap:25px;flex-wrap:wrap}
 @media(max-width:760px){nav{display:none}.stats{grid-template-columns:1fr 1fr}.searchbar,.jobs,.grid2{grid-template-columns:1fr}.full{grid-column:auto}}
 </style>
+<script src="https://js.paystack.co/v2/inline.js">
+async function startFeaturedPayment(){
+ const email=prompt("Enter an email for this test payment:"); if(!email)return;
+ const handler=PaystackPop.setup({key:"pk_test_f3f15c97d209de73c10fc7f246a0f63311d1ccfb",email,amount:500000,currency:"NGN",ref:"BC_TEST_"+Date.now(),metadata:{custom_fields:[{display_name:"Product",variable_name:"product",value:"Featured Job - 7 days"}]},callback:function(r){localStorage.setItem("bc_featured_payment",JSON.stringify({reference:r.reference,date:new Date().toISOString(),amount:5000}));document.getElementById("payNotice").innerHTML='<div class="notice">Test payment completed. Reference: '+esc(r.reference)+'</div>'; },onClose:function(){document.getElementById("payNotice").innerHTML='<div class="muted">Payment window closed.</div>';}}); handler.openIframe();
+}
+</script>
 </head>
 <body>
 <header><div class="nav"><div class="logo">Build<span>Connect</span> NG</div><nav><a href="#jobs">Jobs</a><a href="#post">Post a Job</a><a href="#dashboard">Dashboard</a></nav></div></header>
@@ -65,6 +71,8 @@ footer{background:#111827;color:#cbd5e1;padding:35px 5%;margin-top:30px}.footer-
 <div class="full"><button class="btn primary" type="submit">Publish Job</button></div>
 </form></div>
 </section>
+
+<section class="container" id="featured"><div class="panel" style="background:#fffaf0"><h2>💰 Promote a Job — ₦5,000</h2><p>Pay to feature a construction vacancy for 7 days. This button is connected to Paystack <b>Test Mode</b>; no real money is charged.</p><button class="btn primary" onclick="startFeaturedPayment()">Test Featured Job Payment</button><div id="payNotice"></div></div></section>
 
 <section class="container" id="dashboard">
 <div class="section-title"><div><h2>Worker dashboard</h2><div class="muted">Create a simple profile and track applications on this device.</div></div></div>
@@ -121,5 +129,10 @@ function renderApps(){const apps=getApps();document.getElementById("applications
 function showTab(id,btn){["profile","apps","business"].forEach(x=>document.getElementById(x).classList.toggle("hidden",x!==id));document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));btn.classList.add("active");if(id==="apps")renderApps()}
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 loadProfile();renderJobs();renderApps();
+
+async function startFeaturedPayment(){
+ const email=prompt("Enter an email for this test payment:"); if(!email)return;
+ const handler=PaystackPop.setup({key:"pk_test_f3f15c97d209de73c10fc7f246a0f63311d1ccfb",email,amount:500000,currency:"NGN",ref:"BC_TEST_"+Date.now(),metadata:{custom_fields:[{display_name:"Product",variable_name:"product",value:"Featured Job - 7 days"}]},callback:function(r){localStorage.setItem("bc_featured_payment",JSON.stringify({reference:r.reference,date:new Date().toISOString(),amount:5000}));document.getElementById("payNotice").innerHTML='<div class="notice">Test payment completed. Reference: '+esc(r.reference)+'</div>'; },onClose:function(){document.getElementById("payNotice").innerHTML='<div class="muted">Payment window closed.</div>';}}); handler.openIframe();
+}
 </script>
 </body></html>
