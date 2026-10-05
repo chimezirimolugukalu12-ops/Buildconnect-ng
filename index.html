@@ -27,10 +27,50 @@ input,select,textarea{width:100%;padding:12px;border:1px solid #d8dde5;border-ra
 footer{background:#111827;color:#cbd5e1;padding:35px 5%;margin-top:30px}.footer-inner{max-width:1100px;margin:auto;display:flex;justify-content:space-between;gap:25px;flex-wrap:wrap}
 @media(max-width:760px){nav{display:none}.stats{grid-template-columns:1fr 1fr}.searchbar,.jobs,.grid2{grid-template-columns:1fr}.full{grid-column:auto}}
 </style>
-<script src="https://js.paystack.co/v2/inline.js">
+<script>
 async function startFeaturedPayment(){
- const email=prompt("Enter an email for this test payment:"); if(!email)return;
- const handler=PaystackPop.setup({key:"pk_test_f3f15c97d209de73c10fc7f246a0f63311d1ccfb",email,amount:500000,currency:"NGN",ref:"BC_TEST_"+Date.now(),metadata:{custom_fields:[{display_name:"Product",variable_name:"product",value:"Featured Job - 7 days"}]},callback:function(r){localStorage.setItem("bc_featured_payment",JSON.stringify({reference:r.reference,date:new Date().toISOString(),amount:5000}));document.getElementById("payNotice").innerHTML='<div class="notice">Test payment completed. Reference: '+esc(r.reference)+'</div>'; },onClose:function(){document.getElementById("payNotice").innerHTML='<div class="muted">Payment window closed.</div>';}}); handler.openIframe();
+ const email=prompt("Enter your email for payment:");
+ if(!email)return;
+
+ const payNotice=document.getElementById("payNotice");
+ payNotice.innerHTML='<div class="muted">Starting secure payment...</div>';
+
+ try{
+   const response=await fetch("/api/paystack/initialize",{
+     method:"POST",
+     headers:{"Content-Type":"application/json"},
+     body:JSON.stringify({
+       email:email,
+       jobId:"featured-job"
+     })
+   });
+
+   const data=await response.json();
+
+   if(!response.ok||!data.authorization_url){
+     payNotice.innerHTML='<div class="notice">Unable to start payment: '+esc(data.error||"Please try again.")+'</div>';
+     return;
+   }
+
+   window.location.href=data.authorization_url;
+
+ }catch(error){
+   console.error(error);
+   payNotice.innerHTML='<div class="notice">Payment could not be started. Please try again.</div>';
+ }
+}
+
+const paymentParams=new URLSearchParams(window.location.search);
+
+if(paymentParams.get("payment")==="success"){
+ const reference=paymentParams.get("reference")||"";
+ document.getElementById("payNotice").innerHTML=
+ '<div class="notice">Payment successful! Reference: '+esc(reference)+'</div>';
+}
+
+if(paymentParams.get("payment")==="failed"){
+ document.getElementById("payNotice").innerHTML=
+ '<div class="notice">Payment was not completed. Please try again.</div>';
 }
 </script>
 </head>
