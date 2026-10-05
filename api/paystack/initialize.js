@@ -36,7 +36,7 @@ module.exports = async (req, res) => {
         },
         body: JSON.stringify({
           email: email,
-          amount: "500000",
+          amount: "300000",
           currency: "NGN",
           reference: reference,
           callback_url:
