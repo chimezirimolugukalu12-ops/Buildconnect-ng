@@ -34,7 +34,7 @@ module.exports = async (req, res) => {
       data.status === true &&
       payment &&
       payment.status === "success" &&
-      Number(payment.amount) === 500000 &&
+      Number(payment.amount) === 300000 &&
       payment.currency === "NGN";
 
     if (successful) {
